@@ -5,11 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NLayerProject.Core.Serivces
+namespace NLayerProject.Core.Dtos
 {
-    public interface ICategoryService:IService<Category>
+    public class CategoryWithProductsDto:CategoryDto
     {
-        Task<Category> GetWithProductsByIdAsync(int id);
-
+        public List<ProductDto> Products { get; set; }
     }
 }

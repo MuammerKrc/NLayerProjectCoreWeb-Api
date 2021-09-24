@@ -6,17 +6,10 @@ using System.Threading.Tasks;
 
 namespace NLayerProject.Core.Models
 {
-    public class Category
+    public class Person
     {
-        public Category()
-        {
-            Products = new List<Product>();
-        }
         public int Id { get; set; }
         public string Name { get; set; }
-        public bool IsDeleted { get; set; }
-        public List<Product> Products { get; set; }
-
-
+        public string  SurName { get; set; }
     }
 }

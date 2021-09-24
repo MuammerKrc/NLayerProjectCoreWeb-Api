@@ -1,12 +1,20 @@
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using NlayerProject.Service;
+using NLayerProject.Core.Repositories;
+using NLayerProject.Core.Serivces;
+using NLayerProject.Core.UnitOfWorks;
+using NLayerProject.Data;
+using NLayerProject.Data.Repositories;
+using NLayerProject.Data.UnitOfWorks;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,6 +34,26 @@ namespace NLayerProject.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            //CoreLayer
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+            //ServicesLayer
+            services.AddScoped(typeof(IService<>), typeof(ServiceManager<>));
+            services.AddScoped<ICategoryService, CategoryService>();
+            services.AddScoped<IProductService, ProductService>();
+
+
+
+            //DbContext
+            services.AddDbContext<AppDbContext>(opt => //farklı bir assemblyde migration yapılacağından dolayı entityFramework.design indirilecek.
+            {                                           //sqlserveroptionında assembly olarak bu belirtilecek
+                opt.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"),sqlServer=> 
+                {
+                    sqlServer.MigrationsAssembly("NLayerProject.Data");
+                });
+            });
+            
+
 
             services.AddControllers();
             services.AddSwaggerGen(c =>

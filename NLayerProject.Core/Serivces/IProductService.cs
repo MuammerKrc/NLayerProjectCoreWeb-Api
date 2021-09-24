@@ -10,7 +10,7 @@ namespace NLayerProject.Core.Serivces
     public interface IProductService:IService<Product>
     {
         bool ControlInnerBarcode(Product product);
-        Task<Product> GetWithCategoryByIdAsync();
+        Task<Product> GetWithCategoryByIdAsync(int id);
 
     }
 }
